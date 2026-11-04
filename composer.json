@@ -1,0 +1,28 @@
+{
+    "name": "therencefrn/link-map-for-yoast-seo",
+    "description": "Visualise your internal linking as an interactive graph, built from the links Yoast SEO already indexes.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": ">=8.1"
+    },
+    "require-dev": {
+        "wp-coding-standards/wpcs": "^3.1",
+        "phpcompatibility/phpcompatibility-wp": "^2.1",
+        "wp-cli/i18n-command": "^2.6"
+    },
+    "scripts": {
+        "lint": "phpcs",
+        "test": "node --test tests/layout.test.js",
+        "i18n": [
+            "wp i18n make-pot . languages/link-map-for-yoast-seo.pot --exclude=vendor,tests",
+            "wp i18n make-mo languages",
+            "wp i18n make-php languages"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    }
+}

@@ -1,0 +1,158 @@
+.lmys {
+    /* No red in the palette: red marks orphan pages. */
+    --lmys-c0: #2271b1;
+    --lmys-c1: #e08a1e;
+    --lmys-c2: #1d8f6a;
+    --lmys-c3: #8c5fc4;
+    --lmys-c4: #3fa7d6;
+    --lmys-c5: #b8860b;
+    --lmys-c6: #c2577f;
+    --lmys-c7: #646970;
+    margin: 16px 0 24px;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.lmys-stage {
+    height: clamp(420px, 72vh, 900px);
+    background-color: #fbfbfc;
+    background-image: radial-gradient(#dcdcde 1px, transparent 1px);
+    background-size: 22px 22px;
+}
+
+.lmys-graph {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+.lmys-graph.is-dragging {
+    cursor: grabbing;
+}
+
+.lmys-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 16px;
+    padding: 10px 12px;
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.lmys-tools {
+    display: flex;
+    gap: 4px;
+}
+
+.lmys-tools .button {
+    min-width: 32px;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.lmys-search {
+    min-width: 220px;
+}
+
+.lmys-edge {
+    stroke: #8c8f94;
+    stroke-opacity: 0.35;
+}
+
+.lmys-arrow {
+    fill: #8c8f94;
+}
+
+.lmys-node {
+    cursor: pointer;
+}
+
+.lmys-node circle {
+    stroke: #fff;
+    stroke-width: 1.5;
+}
+
+.lmys-node.is-orphan circle {
+    stroke: #d63638;
+    stroke-width: 2.5;
+}
+
+.lmys-node text {
+    font-size: 11px;
+    fill: #1d2327;
+    paint-order: stroke;
+    stroke: #fbfbfc;
+    stroke-width: 3px;
+    stroke-linejoin: round;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.lmys-node.is-major text,
+.lmys-node:hover text,
+.lmys-node:focus-visible text,
+.lmys-graph.is-focus .lmys-node.is-on text {
+    opacity: 1;
+}
+
+.lmys-graph.is-focus .lmys-node.is-major:not(.is-on) text {
+    opacity: 0;
+}
+
+.lmys-graph.is-focus .lmys-node:not(.is-on),
+.lmys-graph.is-focus .lmys-edge:not(.is-on) {
+    opacity: 0.08;
+}
+
+.lmys-graph.is-focus .lmys-edge.is-on {
+    stroke: #1d2327;
+    stroke-opacity: 0.8;
+}
+
+.lmys-graph.is-focus .lmys-node.is-on text {
+    font-weight: 600;
+}
+
+.lmys-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    margin: 0;
+}
+
+.lmys-legend li {
+    margin: 0;
+}
+
+.lmys-legend li::before {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: 6px;
+    border-radius: 50%;
+    background: var(--lmys-dot);
+    vertical-align: -1px;
+}
+
+.lmys-legend li.is-orphan::before {
+    background: transparent;
+    border: 2px solid #d63638;
+    width: 6px;
+    height: 6px;
+}
+
+.lmys-node:focus {
+    outline: none;
+}
+
+.lmys-node:focus-visible circle {
+    stroke: #1d2327;
+    stroke-width: 3;
+}

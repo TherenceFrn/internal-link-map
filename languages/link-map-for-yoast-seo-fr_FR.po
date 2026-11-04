@@ -1,0 +1,119 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Link Map for Yoast SEO 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/TherenceFrn/link-map-for-yoast-seo/issues\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: French\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-04T21:46:32+00:00\n"
+"PO-Revision-Date: 2026-11-04T21:55:38+00:00\n"
+"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: link-map-for-yoast-seo\n"
+
+#. Plugin Name of the plugin
+#: link-map-for-yoast-seo.php:3
+msgid "Link Map for Yoast SEO"
+msgstr "Link Map for Yoast SEO"
+
+#. Plugin URI of the plugin
+#: link-map-for-yoast-seo.php:4
+msgid "https://github.com/TherenceFrn/link-map-for-yoast-seo"
+msgstr ""
+
+#. Description of the plugin
+#: link-map-for-yoast-seo.php:5
+msgid "Visualise your internal linking as an interactive graph, built from the links Yoast SEO already indexes."
+msgstr "Visualisez votre maillage interne sous forme de graphe interactif, à partir des liens déjà indexés par Yoast SEO."
+
+#. Author of the plugin
+#: link-map-for-yoast-seo.php:10
+msgid "TherenceFrn"
+msgstr ""
+
+#. Author URI of the plugin
+#: link-map-for-yoast-seo.php:11
+msgid "https://github.com/TherenceFrn"
+msgstr ""
+
+#: link-map-for-yoast-seo.php:47
+#: link-map-for-yoast-seo.php:201
+msgid "Internal link map"
+msgstr "Carte du maillage interne"
+
+#: link-map-for-yoast-seo.php:48
+msgid "Link map"
+msgstr "Maillage"
+
+#: link-map-for-yoast-seo.php:67
+msgid "Yoast SEO has not indexed any internal link yet."
+msgstr "Yoast SEO n’a encore indexé aucun lien interne."
+
+#: link-map-for-yoast-seo.php:68
+msgid "Internal link graph"
+msgstr "Graphe du maillage interne"
+
+#: link-map-for-yoast-seo.php:69
+msgid "no incoming link"
+msgstr "sans lien entrant"
+
+#. translators: 1: number of incoming links, 2: number of outgoing links.
+#: link-map-for-yoast-seo.php:71
+#, php-format
+msgid "%1$d incoming · %2$d outgoing"
+msgstr "%1$d entrant(s) · %2$d sortant(s)"
+
+#: link-map-for-yoast-seo.php:72
+msgid "Find a page…"
+msgstr "Rechercher une page…"
+
+#: link-map-for-yoast-seo.php:73
+msgid "Zoom in"
+msgstr "Zoom avant"
+
+#: link-map-for-yoast-seo.php:74
+msgid "Zoom out"
+msgstr "Zoom arrière"
+
+#: link-map-for-yoast-seo.php:75
+msgid "Fit to screen"
+msgstr "Recentrer"
+
+#. translators: %s: post type name, e.g. "Products".
+#: link-map-for-yoast-seo.php:178
+#, php-format
+msgid "%s archive"
+msgstr "Archive : %s"
+
+#: link-map-for-yoast-seo.php:179
+msgid "Home page"
+msgstr "Page d’accueil"
+
+#: link-map-for-yoast-seo.php:203
+msgid "Internal links indexed by Yoast SEO. Node size: incoming links. Scroll to zoom, drag the background to move around, drag a node to rearrange. Click a node to isolate it with its neighbours, double-click to edit it. If the map is empty, run the SEO data optimization in Yoast SEO › Tools."
+msgstr "Liens internes indexés par Yoast SEO. Taille d’un nœud : liens entrants. Molette pour zoomer, glissez le fond pour vous déplacer, glissez un nœud pour le repositionner. Cliquez sur un nœud pour l’isoler avec ses voisins, double-cliquez pour le modifier. Si la carte est vide, lancez l’optimisation des données SEO dans Yoast SEO › Outils."
+
+#. translators: %d: number of orphan pages.
+#: link-map-for-yoast-seo.php:210
+#, php-format
+msgid "Orphan content (%d)"
+msgstr "Contenus orphelins (%d)"
+
+#: link-map-for-yoast-seo.php:214
+msgid "Every published page has at least one incoming link."
+msgstr "Chaque contenu publié reçoit au moins un lien interne."
+
+#: link-map-for-yoast-seo.php:219
+msgid "Content"
+msgstr "Contenu"
+
+#: link-map-for-yoast-seo.php:220
+msgid "Type"
+msgstr "Type"
+
+#: link-map-for-yoast-seo.php:221
+msgid "Outgoing links"
+msgstr "Liens sortants"
