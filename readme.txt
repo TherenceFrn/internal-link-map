@@ -4,7 +4,7 @@ Tags: internal links, internal linking, link graph, orphan pages, seo
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,10 @@ No. The plugin runs only on its own admin page and adds nothing to the front end
 2. Focus mode on a single page.
 
 == Changelog ==
+
+= 1.0.2 =
+* "Open map" link on the Plugins screen.
+* Instant focus mode, without fade animation.
 
 = 1.0.1 =
 * First release.

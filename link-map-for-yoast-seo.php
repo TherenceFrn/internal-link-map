@@ -3,7 +3,7 @@
  * Plugin Name:       Link Map for Yoast SEO
  * Plugin URI:        https://github.com/TherenceFrn/link-map-for-yoast-seo
  * Description:       Visualise your internal linking as an interactive graph, built from the links Yoast SEO already indexes.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Requires Plugins:  wordpress-seo
@@ -23,7 +23,7 @@ namespace LinkMapForYoastSeo;
 
 defined( 'ABSPATH' ) || exit;
 
-const VERSION = '1.0.1';
+const VERSION = '1.0.2';
 const SLUG    = 'link-map-for-yoast-seo';
 
 // Bundled translations until translate.wordpress.org serves them.
@@ -56,6 +56,19 @@ add_action(
 		}
 	},
 	20
+);
+
+// "Open map" link in the plugin's row on the Plugins screen.
+add_filter(
+	'plugin_action_links_' . plugin_basename( __FILE__ ),
+	static function ( array $links ): array {
+		if ( defined( 'WPSEO_VERSION' ) && current_user_can( 'edit_others_posts' ) ) {
+			$url = admin_url( 'admin.php?page=' . SLUG );
+			array_unshift( $links, '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Open map', 'link-map-for-yoast-seo' ) . '</a>' );
+		}
+
+		return $links;
+	}
 );
 
 function enqueue(): void {
