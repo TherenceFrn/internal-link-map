@@ -20,3 +20,37 @@ jobs:
         with:
           node-version: 22
       - run: composer test
+
+  # A new "Version:" on main, with lint and tests green, becomes tag vX.Y.Z and a GitHub release with the zip.
+  release:
+    needs: lint-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Read and check version
+        id: version
+        run: |
+          v=$(sed -n 's/^ \* Version: *//p' link-map-for-yoast-seo.php)
+          const=$(sed -n "s/^const VERSION = '\(.*\)';/\1/p" link-map-for-yoast-seo.php)
+          stable=$(sed -n 's/^Stable tag: *//p' readme.txt)
+          if [ "$v" != "$const" ] || [ "$v" != "$stable" ]; then
+            echo "::error::Version mismatch: header $v, VERSION $const, Stable tag $stable"
+            exit 1
+          fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          git rev-parse -q --verify "refs/tags/v$v" >/dev/null && echo "exists=true" >> "$GITHUB_OUTPUT" || true
+      - name: Build zip and publish release
+        if: steps.version.outputs.exists != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          V: ${{ steps.version.outputs.version }}
+        run: |
+          git archive --prefix=link-map-for-yoast-seo/ -o "link-map-for-yoast-seo-$V.zip" HEAD
+          # Release notes: this version's entry in the readme.txt changelog.
+          awk -v h="= $V =" '$0 == h {on=1; next} on && /^= / {exit} on' readme.txt > notes.md
+          gh release create "v$V" "link-map-for-yoast-seo-$V.zip" --target "$GITHUB_SHA" --title "$V" --notes-file notes.md
