@@ -72,7 +72,7 @@
 
     const NS = 'http://www.w3.org/2000/svg';
     const el = (name, attrs = {}, parent) => {
-        const node = name === 'svg' || ['g', 'line', 'circle', 'text', 'title', 'defs', 'marker', 'path'].includes(name)
+        const node = name === 'svg' || ['g', 'line', 'circle', 'text', 'title', 'defs', 'marker', 'path', 'rect'].includes(name)
             ? document.createElementNS(NS, name)
             : document.createElement(name);
         Object.entries(attrs).forEach(([k, v]) => node.setAttribute(k, v));
@@ -114,6 +114,8 @@
     const zoomOut = button(t.zoomOut, '−');
     const zoomIn = button(t.zoomIn, '+');
     const fitButton = button(t.fit, '⤢');
+    const shotButton = button(t.screenshot, '');
+    el('span', { class: 'dashicons dashicons-camera', 'aria-hidden': 'true' }, shotButton);
 
     const stage = el('div', { class: 'lmys-stage' }, root);
     const svg = el('svg', { class: 'lmys-graph', role: 'img', 'aria-label': t.graph }, stage);
@@ -141,7 +143,7 @@
     const nodeLayer = el('g', {}, svg);
     const byG = new Map();
     nodes.forEach((n) => {
-        const cls = ['lmys-node', n.isPost && n.in === 0 ? 'is-orphan' : '', n.in >= major ? 'is-major' : ''].join(' ').trim();
+        const cls = ['lmys-node', n.orphan ? 'is-orphan' : '', n.in >= major ? 'is-major' : ''].join(' ').trim();
         n.g = el('g', { class: cls, tabindex: 0 }, nodeLayer);
         byG.set(n.g, n);
         el('circle', { r: n.r, fill: color(n.group) }, n.g);
@@ -211,6 +213,42 @@
     zoomIn.addEventListener('click', () => zoom(1.4));
     zoomOut.addEventListener('click', () => zoom(1 / 1.4));
     fitButton.addEventListener('click', fit);
+    shotButton.addEventListener('click', screenshot);
+
+    // PNG of the current view: the SVG is cloned with each element's computed style inlined
+    // (focus mode, hidden labels and colours included), drawn on a canvas at 2x, then downloaded.
+    function screenshot() {
+        const w = svg.clientWidth, h = svg.clientHeight, ratio = 2;
+        const clone = svg.cloneNode(true);
+        const props = ['display', 'opacity', 'fill', 'fill-opacity', 'stroke', 'stroke-opacity', 'stroke-width', 'stroke-linejoin', 'paint-order', 'font-family', 'font-size', 'font-weight'];
+        const copies = [clone, ...clone.querySelectorAll('*')];
+        [svg, ...svg.querySelectorAll('*')].forEach((node, i) => {
+            const cs = getComputedStyle(node);
+            copies[i].setAttribute('style', props.map((p) => `${p}:${cs.getPropertyValue(p)}`).join(';'));
+        });
+        clone.setAttribute('xmlns', NS);
+        clone.setAttribute('width', w);
+        clone.setAttribute('height', h);
+        clone.prepend(el('rect', { x: view.x, y: view.y, width: view.w, height: view.h, fill: '#fbfbfc' }));
+
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = w * ratio;
+            canvas.height = h * ratio;
+            const ctx = canvas.getContext('2d');
+            ctx.scale(ratio, ratio);
+            ctx.drawImage(img, 0, 0, w, h);
+            canvas.toBlob((blob) => {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `link-map-${new Date().toISOString().slice(0, 10)}.png`;
+                a.click();
+                setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+            }, 'image/png');
+        };
+        img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(clone));
+    }
 
     // One pointer handler: a drag on a node moves it, on the background pans; no movement is a click.
     let drag = null;

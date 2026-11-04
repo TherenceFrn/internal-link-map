@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-11-04T21:46:32+00:00\n"
-"PO-Revision-Date: 2026-11-04T22:11:38+00:00\n"
+"PO-Revision-Date: 2026-11-04T23:07:00+00:00\n"
 "Language: fr_FR\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: WP-CLI 2.12.0\n"
@@ -40,7 +40,7 @@ msgid "https://github.com/TherenceFrn"
 msgstr ""
 
 #: link-map-for-yoast-seo.php:47
-#: link-map-for-yoast-seo.php:214
+#: link-map-for-yoast-seo.php:221
 msgid "Internal link map"
 msgstr "Carte du maillage interne"
 
@@ -86,38 +86,54 @@ msgstr "Zoom arrière"
 msgid "Fit to screen"
 msgstr "Recentrer"
 
+#: link-map-for-yoast-seo.php:89
+msgid "Download as image"
+msgstr "Télécharger en image"
+
 #. translators: %s: post type name, e.g. "Products".
-#: link-map-for-yoast-seo.php:191
+#: link-map-for-yoast-seo.php:195
 #, php-format
 msgid "%s archive"
 msgstr "Archive : %s"
 
-#: link-map-for-yoast-seo.php:192
+#: link-map-for-yoast-seo.php:196
 msgid "Home page"
 msgstr "Page d’accueil"
 
-#: link-map-for-yoast-seo.php:216
-msgid "Internal links indexed by Yoast SEO. Node size: incoming links. Scroll to zoom, drag the background to move around, drag a node to rearrange. Click a node to isolate it with its neighbours, double-click to edit it. If the map is empty, run the SEO data optimization in Yoast SEO › Tools."
-msgstr "Liens internes indexés par Yoast SEO. Taille d’un nœud : liens entrants. Molette pour zoomer, glissez le fond pour vous déplacer, glissez un nœud pour le repositionner. Cliquez sur un nœud pour l’isoler avec ses voisins, double-cliquez pour le modifier. Si la carte est vide, lancez l’optimisation des données SEO dans Yoast SEO › Outils."
+#: link-map-for-yoast-seo.php:197
+msgid "Author archives"
+msgstr "Archives d’auteur"
+
+#: link-map-for-yoast-seo.php:198
+msgid "Date archives"
+msgstr "Archives par date"
+
+#: link-map-for-yoast-seo.php:199
+msgid "Search and error pages"
+msgstr "Pages de recherche et d’erreur"
+
+#: link-map-for-yoast-seo.php:223
+msgid "Internal links found in your content by Yoast SEO (menus, header and footer are not counted). Node size: incoming links. Scroll to zoom, drag the background to move around, drag a node to rearrange. Click a node to isolate it with its neighbours, double-click to edit it. If the map is empty, run the SEO data optimization in Yoast SEO › Tools."
+msgstr "Liens internes trouvés par Yoast SEO dans vos contenus (menus, en-tête et pied de page ne sont pas comptés). Taille d’un nœud : liens entrants. Molette pour zoomer, glissez le fond pour vous déplacer, glissez un nœud pour le repositionner. Cliquez sur un nœud pour l’isoler avec ses voisins, double-cliquez pour le modifier. Si la carte est vide, lancez l’optimisation des données SEO dans Yoast SEO › Outils."
 
 #. translators: %d: number of orphan pages.
-#: link-map-for-yoast-seo.php:223
+#: link-map-for-yoast-seo.php:233
 #, php-format
 msgid "Orphan content (%d)"
 msgstr "Contenus orphelins (%d)"
 
-#: link-map-for-yoast-seo.php:227
+#: link-map-for-yoast-seo.php:238
 msgid "Every published page has at least one incoming link."
 msgstr "Chaque contenu publié reçoit au moins un lien interne."
 
-#: link-map-for-yoast-seo.php:232
-msgid "Content"
-msgstr "Contenu"
+#: link-map-for-yoast-seo.php:240
+msgid "Published content that no other page links to."
+msgstr "Contenus publiés vers lesquels aucune autre page ne pointe."
 
-#: link-map-for-yoast-seo.php:233
-msgid "Type"
-msgstr "Type"
-
-#: link-map-for-yoast-seo.php:234
-msgid "Outgoing links"
-msgstr "Liens sortants"
+#. translators: %d: number of outgoing internal links.
+#: link-map-for-yoast-seo.php:253
+#, php-format
+msgid "%d outgoing link"
+msgid_plural "%d outgoing links"
+msgstr[0] "%d lien sortant"
+msgstr[1] "%d liens sortants"

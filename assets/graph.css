@@ -1,4 +1,6 @@
 .lmys {
+    display: flex;
+    align-items: stretch;
     /* No red in the palette: red marks orphan pages. */
     --lmys-c0: #2271b1;
     --lmys-c1: #e08a1e;
@@ -8,11 +10,8 @@
     --lmys-c5: #b8860b;
     --lmys-c6: #c2577f;
     --lmys-c7: #646970;
+    gap: 12px;
     margin: 16px 0 24px;
-    background: #fff;
-    border: 1px solid #c3c4c7;
-    border-radius: 4px;
-    overflow: hidden;
 }
 
 .lmys-stage {
@@ -51,7 +50,11 @@
 }
 
 .lmys-tools .button {
-    min-width: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    padding: 0;
     font-size: 16px;
     line-height: 1;
 }
@@ -155,4 +158,120 @@
 .lmys-node:focus-visible circle {
     stroke: #1d2327;
     stroke-width: 3;
+}
+
+.lmys-map,
+.lmys-aside {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.lmys-map {
+    flex: 1;
+    min-width: 0;
+}
+
+.lmys-aside {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.lmys-aside summary {
+    padding: 12px 10px;
+    font-weight: 600;
+    color: #2271b1;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.lmys-aside summary:hover {
+    background: #f6f7f7;
+    color: #135e96;
+}
+
+.lmys-aside summary:focus-visible {
+    outline: 2px solid #2271b1;
+    outline-offset: -2px;
+}
+
+/* Collapsed: a vertical tab button, full height, beside the map. */
+.lmys-aside:not([open]) summary {
+    flex: 1;
+    writing-mode: vertical-rl;
+    list-style: none;
+}
+
+.lmys-aside:not([open]) summary::before {
+    content: "‹";
+    display: inline-block;
+    margin-bottom: 8px;
+    font-size: 18px;
+    line-height: 1;
+    writing-mode: horizontal-tb;
+}
+
+.lmys-aside:not([open]) summary::-webkit-details-marker {
+    display: none;
+}
+
+.lmys-aside[open] {
+    width: 320px;
+}
+
+.lmys-aside[open] summary {
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.lmys-aside-body {
+    /* Bar and map height, so the list scrolls instead of stretching the page. */
+    max-height: calc(clamp(420px, 72vh, 900px) + 10px);
+    overflow-y: auto;
+    padding: 0 12px 12px;
+}
+
+.lmys-aside-body ul {
+    margin: 0;
+}
+
+.lmys-aside-body li {
+    margin: 0;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.lmys-aside-body li span {
+    display: block;
+    color: #646970;
+    font-size: 12px;
+}
+
+@media (max-width: 782px) {
+    .lmys {
+        flex-direction: column;
+    }
+
+    .lmys-aside[open] {
+        width: auto;
+    }
+
+    .lmys-aside:not([open]) summary {
+        writing-mode: horizontal-tb;
+    }
+
+    .lmys-aside:not([open]) summary::before {
+        content: "▸";
+        margin: 0 6px 0 0;
+        font-size: 14px;
+    }
+}
+
+/* WordPress gives button icons line-height 1.9 (.wp-core-ui .button .dashicons); reset it so the icon stays centred. */
+.lmys-tools .button .dashicons {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    line-height: 1;
 }

@@ -3,7 +3,7 @@
  * Plugin Name:       Link Map for Yoast SEO
  * Plugin URI:        https://github.com/TherenceFrn/link-map-for-yoast-seo
  * Description:       Visualise your internal linking as an interactive graph, built from the links Yoast SEO already indexes.
- * Version:           1.0.2
+ * Version:           1.0.6
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Requires Plugins:  wordpress-seo
@@ -23,7 +23,7 @@ namespace LinkMapForYoastSeo;
 
 defined( 'ABSPATH' ) || exit;
 
-const VERSION = '1.0.2';
+const VERSION = '1.0.6';
 const SLUG    = 'link-map-for-yoast-seo';
 
 // Bundled translations until translate.wordpress.org serves them.
@@ -72,20 +72,21 @@ add_filter(
 );
 
 function enqueue(): void {
-	wp_enqueue_style( SLUG, plugins_url( 'assets/graph.css', __FILE__ ), array(), VERSION );
+	wp_enqueue_style( SLUG, plugins_url( 'assets/graph.css', __FILE__ ), array( 'dashicons' ), VERSION );
 	wp_enqueue_script( SLUG, plugins_url( 'assets/graph.js', __FILE__ ), array(), VERSION, array( 'in_footer' => true ) );
 
 	$data = graph() + array(
 		'i18n' => array(
-			'empty'   => __( 'Yoast SEO has not indexed any internal link yet.', 'link-map-for-yoast-seo' ),
-			'graph'   => __( 'Internal link graph', 'link-map-for-yoast-seo' ),
-			'orphan'  => __( 'no incoming link', 'link-map-for-yoast-seo' ),
+			'empty'      => __( 'Yoast SEO has not indexed any internal link yet.', 'link-map-for-yoast-seo' ),
+			'graph'      => __( 'Internal link graph', 'link-map-for-yoast-seo' ),
+			'orphan'     => __( 'no incoming link', 'link-map-for-yoast-seo' ),
 			/* translators: 1: number of incoming links, 2: number of outgoing links. */
-			'counts'  => __( '%1$d incoming · %2$d outgoing', 'link-map-for-yoast-seo' ),
-			'search'  => __( 'Find a page…', 'link-map-for-yoast-seo' ),
-			'zoomIn'  => __( 'Zoom in', 'link-map-for-yoast-seo' ),
-			'zoomOut' => __( 'Zoom out', 'link-map-for-yoast-seo' ),
-			'fit'     => __( 'Fit to screen', 'link-map-for-yoast-seo' ),
+			'counts'     => __( '%1$d incoming · %2$d outgoing', 'link-map-for-yoast-seo' ),
+			'search'     => __( 'Find a page…', 'link-map-for-yoast-seo' ),
+			'zoomIn'     => __( 'Zoom in', 'link-map-for-yoast-seo' ),
+			'zoomOut'    => __( 'Zoom out', 'link-map-for-yoast-seo' ),
+			'fit'        => __( 'Fit to screen', 'link-map-for-yoast-seo' ),
+			'screenshot' => __( 'Download as image', 'link-map-for-yoast-seo' ),
 		),
 	);
 	wp_add_inline_script( SLUG, 'window.linkMapForYoastSeo = ' . wp_json_encode( $data ) . ';', 'before' );
@@ -145,6 +146,9 @@ function graph(): array {
 	);
 	// phpcs:enable
 
+	// Like Yoast's own orphaned content filter: the front page and the posts page are reached through navigation.
+	$navigation = 'page' === get_option( 'show_on_front' ) ? array( (int) get_option( 'page_on_front' ), (int) get_option( 'page_for_posts' ) ) : array();
+
 	$nodes = array();
 	foreach ( $rows as $row ) {
 		if ( 'post' === $row['object_type'] && ! in_array( $row['object_sub_type'], $types, true ) ) {
@@ -156,7 +160,7 @@ function graph(): array {
 			'id'     => $id,
 			'label'  => $row['breadcrumb_title'] ? $row['breadcrumb_title'] : (string) wp_parse_url( (string) $row['permalink'], PHP_URL_PATH ),
 			'group'  => group_label( $row ),
-			'isPost' => 'post' === $row['object_type'],
+			'orphan' => 'post' === $row['object_type'] && 0 === (int) $row['incoming_link_count'] && ! in_array( (int) $row['object_id'], $navigation, true ),
 			'url'    => $row['permalink'],
 			'edit'   => edit_link( $row ),
 			'out'    => (int) $row['link_count'],
@@ -190,6 +194,9 @@ function group_label( array $row ): string {
 		/* translators: %s: post type name, e.g. "Products". */
 		'post-type-archive' => $type ? sprintf( __( '%s archive', 'link-map-for-yoast-seo' ), $type->labels->name ) : null,
 		'home-page' => __( 'Home page', 'link-map-for-yoast-seo' ),
+		'user' => __( 'Author archives', 'link-map-for-yoast-seo' ),
+		'date-archive' => __( 'Date archives', 'link-map-for-yoast-seo' ),
+		'system-page' => __( 'Search and error pages', 'link-map-for-yoast-seo' ),
 		default => null,
 	};
 
@@ -208,49 +215,51 @@ function edit_link( array $row ): ?string {
 }
 
 function render(): void {
-	$orphans = array_filter( graph()['nodes'], static fn ( array $n ): bool => $n['isPost'] && 0 === $n['in'] );
+	$orphans = array_filter( graph()['nodes'], static fn ( array $n ): bool => $n['orphan'] );
 	?>
 	<div class="wrap">
 		<h1><?php esc_html_e( 'Internal link map', 'link-map-for-yoast-seo' ); ?></h1>
 		<p class="description">
-			<?php esc_html_e( 'Internal links indexed by Yoast SEO. Node size: incoming links. Scroll to zoom, drag the background to move around, drag a node to rearrange. Click a node to isolate it with its neighbours, double-click to edit it. If the map is empty, run the SEO data optimization in Yoast SEO › Tools.', 'link-map-for-yoast-seo' ); ?>
+			<?php esc_html_e( 'Internal links found in your content by Yoast SEO (menus, header and footer are not counted). Node size: incoming links. Scroll to zoom, drag the background to move around, drag a node to rearrange. Click a node to isolate it with its neighbours, double-click to edit it. If the map is empty, run the SEO data optimization in Yoast SEO › Tools.', 'link-map-for-yoast-seo' ); ?>
 		</p>
-		<div id="link-map-for-yoast-seo" class="lmys"></div>
+		<div class="lmys">
+			<div id="link-map-for-yoast-seo" class="lmys-map"></div>
 
-		<h2>
-			<?php
-			/* translators: %d: number of orphan pages. */
-			printf( esc_html__( 'Orphan content (%d)', 'link-map-for-yoast-seo' ), count( $orphans ) );
-			?>
-		</h2>
-		<?php if ( array() === $orphans ) : ?>
-			<p><?php esc_html_e( 'Every published page has at least one incoming link.', 'link-map-for-yoast-seo' ); ?></p>
-		<?php else : ?>
-			<table class="widefat striped">
-				<thead>
-					<tr>
-						<th scope="col"><?php esc_html_e( 'Content', 'link-map-for-yoast-seo' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Type', 'link-map-for-yoast-seo' ); ?></th>
-						<th scope="col"><?php esc_html_e( 'Outgoing links', 'link-map-for-yoast-seo' ); ?></th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php foreach ( $orphans as $node ) : ?>
-						<tr>
-							<td>
-								<?php if ( $node['edit'] ) : ?>
-									<a href="<?php echo esc_url( $node['edit'] ); ?>"><?php echo esc_html( $node['label'] ); ?></a>
-								<?php else : ?>
-									<?php echo esc_html( $node['label'] ); ?>
-								<?php endif; ?>
-							</td>
-							<td><?php echo esc_html( $node['group'] ); ?></td>
-							<td><?php echo (int) $node['out']; ?></td>
-						</tr>
-					<?php endforeach; ?>
-				</tbody>
-			</table>
-		<?php endif; ?>
+			<?php // Collapsed by default; native <details> needs no script and works with the keyboard. ?>
+			<details class="lmys-aside">
+				<summary>
+					<?php
+					/* translators: %d: number of orphan pages. */
+					printf( esc_html__( 'Orphan content (%d)', 'link-map-for-yoast-seo' ), count( $orphans ) );
+					?>
+				</summary>
+				<div class="lmys-aside-body">
+					<?php if ( array() === $orphans ) : ?>
+						<p><?php esc_html_e( 'Every published page has at least one incoming link.', 'link-map-for-yoast-seo' ); ?></p>
+					<?php else : ?>
+						<p class="description"><?php esc_html_e( 'Published content that no other page links to.', 'link-map-for-yoast-seo' ); ?></p>
+						<ul>
+							<?php foreach ( $orphans as $node ) : ?>
+								<li>
+									<?php if ( $node['edit'] ) : ?>
+										<a href="<?php echo esc_url( $node['edit'] ); ?>"><?php echo esc_html( $node['label'] ); ?></a>
+									<?php else : ?>
+										<?php echo esc_html( $node['label'] ); ?>
+									<?php endif; ?>
+									<span>
+										<?php
+										echo esc_html( $node['group'] ) . ' · ';
+										/* translators: %d: number of outgoing internal links. */
+										printf( esc_html( _n( '%d outgoing link', '%d outgoing links', $node['out'], 'link-map-for-yoast-seo' ) ), (int) $node['out'] );
+										?>
+									</span>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					<?php endif; ?>
+				</div>
+			</details>
+		</div>
 	</div>
 	<?php
 }
