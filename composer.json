@@ -1,5 +1,5 @@
 {
-    "name": "therencefrn/link-map-for-yoast-seo",
+    "name": "therencefrn/internal-link-map",
     "description": "Visualise your internal linking as an interactive graph, built from the links Yoast SEO already indexes.",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
@@ -15,7 +15,7 @@
         "lint": "phpcs",
         "test": "node --test tests/layout.test.js",
         "i18n": [
-            "wp i18n make-pot . languages/link-map-for-yoast-seo.pot --exclude=vendor,tests",
+            "wp i18n make-pot . languages/internal-link-map.pot --exclude=vendor,tests",
             "wp i18n make-mo languages",
             "wp i18n make-php languages"
         ]

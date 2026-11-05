@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="Link Map for Yoast SEO">
+<ruleset name="Internal Link Map">
     <file>.</file>
     <exclude-pattern>/vendor/*</exclude-pattern>
     <exclude-pattern>/tests/*</exclude-pattern>
@@ -17,12 +17,12 @@
     </rule>
     <rule ref="WordPress.WP.I18n">
         <properties>
-            <property name="text_domain" type="array" value="link-map-for-yoast-seo"/>
+            <property name="text_domain" type="array" value="internal-link-map"/>
         </properties>
     </rule>
     <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
         <properties>
-            <property name="prefixes" type="array" value="LinkMapForYoastSeo,lmys"/>
+            <property name="prefixes" type="array" value="InternalLinkMap,lmys"/>
         </properties>
     </rule>
 </ruleset>

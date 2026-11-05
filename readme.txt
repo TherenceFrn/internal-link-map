@@ -1,10 +1,10 @@
-=== Link Map for Yoast SEO ===
+=== Internal Link Map ===
 Contributors: therence
 Tags: internal links, internal linking, link graph, orphan pages, seo
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.0.6
+Stable tag: 1.1.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ See your internal linking as an interactive graph and spot orphan pages, using t
 
 == Description ==
 
-Yoast SEO records every internal link on your site, but only shows them as counts in a column. Link Map for Yoast SEO turns that data into a map:
+Yoast SEO records every internal link on your site, but only shows them as counts in a column. Internal Link Map turns that data into a map:
 
 * **Interactive graph** of your published content, categories and archives. Each arrow is an internal link; a node grows with its incoming links.
 * **Orphan content**: pages with no incoming link are circled in red and listed in a collapsible side panel, with a link to edit each one.
@@ -31,7 +31,7 @@ This plugin is not affiliated with or endorsed by Yoast BV.
 == Installation ==
 
 1. Install and activate Yoast SEO.
-2. In **Plugins › Add New**, search for "Link Map for Yoast SEO", then install and activate it.
+2. In **Plugins › Add New**, search for "Internal Link Map", then install and activate it.
 3. Open **Yoast SEO › Link map**.
 
 == Frequently Asked Questions ==
@@ -62,6 +62,9 @@ No. The plugin runs only on its own admin page and adds nothing to the front end
 2. Focus mode on a single page.
 
 == Changelog ==
+
+= 1.1.0 =
+* Renamed to Internal Link Map (plugin folder `internal-link-map`), as WordPress.org does not allow "Yoast" in plugin names. Deactivate the old version, then install and activate this one.
 
 = 1.0.6 =
 * Download the current view as a PNG image.

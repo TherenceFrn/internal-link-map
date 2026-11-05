@@ -60,8 +60,8 @@
         return;
     }
 
-    const data = window.linkMapForYoastSeo;
-    const root = document.getElementById('link-map-for-yoast-seo');
+    const data = window.internalLinkMap;
+    const root = document.getElementById('internal-link-map');
     if (!data || !root) return;
 
     const t = data.i18n;

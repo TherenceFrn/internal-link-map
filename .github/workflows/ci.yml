@@ -35,8 +35,8 @@ jobs:
       - name: Read and check version
         id: version
         run: |
-          v=$(sed -n 's/^ \* Version: *//p' link-map-for-yoast-seo.php)
-          const=$(sed -n "s/^const VERSION = '\(.*\)';/\1/p" link-map-for-yoast-seo.php)
+          v=$(sed -n 's/^ \* Version: *//p' internal-link-map.php)
+          const=$(sed -n "s/^const VERSION = '\(.*\)';/\1/p" internal-link-map.php)
           stable=$(sed -n 's/^Stable tag: *//p' readme.txt)
           if [ "$v" != "$const" ] || [ "$v" != "$stable" ]; then
             echo "::error::Version mismatch: header $v, VERSION $const, Stable tag $stable"
@@ -50,7 +50,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           V: ${{ steps.version.outputs.version }}
         run: |
-          git archive --prefix=link-map-for-yoast-seo/ -o "link-map-for-yoast-seo-$V.zip" HEAD
+          git archive --prefix=internal-link-map/ -o "internal-link-map-$V.zip" HEAD
           # Release notes: this version's entry in the readme.txt changelog.
           awk -v h="= $V =" '$0 == h {on=1; next} on && /^= / {exit} on' readme.txt > notes.md
-          gh release create "v$V" "link-map-for-yoast-seo-$V.zip" --target "$GITHUB_SHA" --title "$V" --notes-file notes.md
+          gh release create "v$V" "internal-link-map-$V.zip" --target "$GITHUB_SHA" --title "$V" --notes-file notes.md

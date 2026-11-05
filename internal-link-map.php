@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name:       Link Map for Yoast SEO
- * Plugin URI:        https://github.com/TherenceFrn/link-map-for-yoast-seo
+ * Plugin Name:       Internal Link Map
+ * Plugin URI:        https://github.com/TherenceFrn/internal-link-map
  * Description:       Visualise your internal linking as an interactive graph, built from the links Yoast SEO already indexes.
- * Version:           1.0.6
+ * Version:           1.1.0
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Requires Plugins:  wordpress-seo
@@ -11,20 +11,20 @@
  * Author URI:        https://github.com/TherenceFrn
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       link-map-for-yoast-seo
+ * Text Domain:       internal-link-map
  * Domain Path:       /languages
  *
- * @package LinkMapForYoastSeo
+ * @package InternalLinkMap
  */
 
 declare(strict_types=1);
 
-namespace LinkMapForYoastSeo;
+namespace InternalLinkMap;
 
 defined( 'ABSPATH' ) || exit;
 
-const VERSION = '1.0.6';
-const SLUG    = 'link-map-for-yoast-seo';
+const VERSION = '1.1.0';
+const SLUG    = 'internal-link-map';
 
 // Bundled translations until translate.wordpress.org serves them.
 add_action(
@@ -44,8 +44,8 @@ add_action(
 
 		$hook = add_submenu_page(
 			'wpseo_dashboard',
-			__( 'Internal link map', 'link-map-for-yoast-seo' ),
-			__( 'Link map', 'link-map-for-yoast-seo' ),
+			__( 'Internal link map', 'internal-link-map' ),
+			__( 'Link map', 'internal-link-map' ),
 			'edit_others_posts',
 			SLUG,
 			__NAMESPACE__ . '\\render'
@@ -64,7 +64,7 @@ add_filter(
 	static function ( array $links ): array {
 		if ( defined( 'WPSEO_VERSION' ) && current_user_can( 'edit_others_posts' ) ) {
 			$url = admin_url( 'admin.php?page=' . SLUG );
-			array_unshift( $links, '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Open map', 'link-map-for-yoast-seo' ) . '</a>' );
+			array_unshift( $links, '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Open map', 'internal-link-map' ) . '</a>' );
 		}
 
 		return $links;
@@ -77,19 +77,19 @@ function enqueue(): void {
 
 	$data = graph() + array(
 		'i18n' => array(
-			'empty'      => __( 'Yoast SEO has not indexed any internal link yet.', 'link-map-for-yoast-seo' ),
-			'graph'      => __( 'Internal link graph', 'link-map-for-yoast-seo' ),
-			'orphan'     => __( 'no incoming link', 'link-map-for-yoast-seo' ),
+			'empty'      => __( 'Yoast SEO has not indexed any internal link yet.', 'internal-link-map' ),
+			'graph'      => __( 'Internal link graph', 'internal-link-map' ),
+			'orphan'     => __( 'no incoming link', 'internal-link-map' ),
 			/* translators: 1: number of incoming links, 2: number of outgoing links. */
-			'counts'     => __( '%1$d incoming · %2$d outgoing', 'link-map-for-yoast-seo' ),
-			'search'     => __( 'Find a page…', 'link-map-for-yoast-seo' ),
-			'zoomIn'     => __( 'Zoom in', 'link-map-for-yoast-seo' ),
-			'zoomOut'    => __( 'Zoom out', 'link-map-for-yoast-seo' ),
-			'fit'        => __( 'Fit to screen', 'link-map-for-yoast-seo' ),
-			'screenshot' => __( 'Download as image', 'link-map-for-yoast-seo' ),
+			'counts'     => __( '%1$d incoming · %2$d outgoing', 'internal-link-map' ),
+			'search'     => __( 'Find a page…', 'internal-link-map' ),
+			'zoomIn'     => __( 'Zoom in', 'internal-link-map' ),
+			'zoomOut'    => __( 'Zoom out', 'internal-link-map' ),
+			'fit'        => __( 'Fit to screen', 'internal-link-map' ),
+			'screenshot' => __( 'Download as image', 'internal-link-map' ),
 		),
 	);
-	wp_add_inline_script( SLUG, 'window.linkMapForYoastSeo = ' . wp_json_encode( $data ) . ';', 'before' );
+	wp_add_inline_script( SLUG, 'window.internalLinkMap = ' . wp_json_encode( $data ) . ';', 'before' );
 }
 
 /**
@@ -192,11 +192,11 @@ function group_label( array $row ): string {
 		'post' => $type?->labels->name,
 		'term' => get_taxonomy( $sub )->labels->name ?? null,
 		/* translators: %s: post type name, e.g. "Products". */
-		'post-type-archive' => $type ? sprintf( __( '%s archive', 'link-map-for-yoast-seo' ), $type->labels->name ) : null,
-		'home-page' => __( 'Home page', 'link-map-for-yoast-seo' ),
-		'user' => __( 'Author archives', 'link-map-for-yoast-seo' ),
-		'date-archive' => __( 'Date archives', 'link-map-for-yoast-seo' ),
-		'system-page' => __( 'Search and error pages', 'link-map-for-yoast-seo' ),
+		'post-type-archive' => $type ? sprintf( __( '%s archive', 'internal-link-map' ), $type->labels->name ) : null,
+		'home-page' => __( 'Home page', 'internal-link-map' ),
+		'user' => __( 'Author archives', 'internal-link-map' ),
+		'date-archive' => __( 'Date archives', 'internal-link-map' ),
+		'system-page' => __( 'Search and error pages', 'internal-link-map' ),
 		default => null,
 	};
 
@@ -218,26 +218,26 @@ function render(): void {
 	$orphans = array_filter( graph()['nodes'], static fn ( array $n ): bool => $n['orphan'] );
 	?>
 	<div class="wrap">
-		<h1><?php esc_html_e( 'Internal link map', 'link-map-for-yoast-seo' ); ?></h1>
+		<h1><?php esc_html_e( 'Internal link map', 'internal-link-map' ); ?></h1>
 		<p class="description">
-			<?php esc_html_e( 'Internal links found in your content by Yoast SEO (menus, header and footer are not counted). Node size: incoming links. Scroll to zoom, drag the background to move around, drag a node to rearrange. Click a node to isolate it with its neighbours, double-click to edit it. If the map is empty, run the SEO data optimization in Yoast SEO › Tools.', 'link-map-for-yoast-seo' ); ?>
+			<?php esc_html_e( 'Internal links found in your content by Yoast SEO (menus, header and footer are not counted). Node size: incoming links. Scroll to zoom, drag the background to move around, drag a node to rearrange. Click a node to isolate it with its neighbours, double-click to edit it. If the map is empty, run the SEO data optimization in Yoast SEO › Tools.', 'internal-link-map' ); ?>
 		</p>
 		<div class="lmys">
-			<div id="link-map-for-yoast-seo" class="lmys-map"></div>
+			<div id="internal-link-map" class="lmys-map"></div>
 
 			<?php // Collapsed by default; native <details> needs no script and works with the keyboard. ?>
 			<details class="lmys-aside">
 				<summary>
 					<?php
 					/* translators: %d: number of orphan pages. */
-					printf( esc_html__( 'Orphan content (%d)', 'link-map-for-yoast-seo' ), count( $orphans ) );
+					printf( esc_html__( 'Orphan content (%d)', 'internal-link-map' ), count( $orphans ) );
 					?>
 				</summary>
 				<div class="lmys-aside-body">
 					<?php if ( array() === $orphans ) : ?>
-						<p><?php esc_html_e( 'Every published page has at least one incoming link.', 'link-map-for-yoast-seo' ); ?></p>
+						<p><?php esc_html_e( 'Every published page has at least one incoming link.', 'internal-link-map' ); ?></p>
 					<?php else : ?>
-						<p class="description"><?php esc_html_e( 'Published content that no other page links to.', 'link-map-for-yoast-seo' ); ?></p>
+						<p class="description"><?php esc_html_e( 'Published content that no other page links to.', 'internal-link-map' ); ?></p>
 						<ul>
 							<?php foreach ( $orphans as $node ) : ?>
 								<li>
@@ -250,7 +250,7 @@ function render(): void {
 										<?php
 										echo esc_html( $node['group'] ) . ' · ';
 										/* translators: %d: number of outgoing internal links. */
-										printf( esc_html( _n( '%d outgoing link', '%d outgoing links', $node['out'], 'link-map-for-yoast-seo' ) ), (int) $node['out'] );
+										printf( esc_html( _n( '%d outgoing link', '%d outgoing links', $node['out'], 'internal-link-map' ) ), (int) $node['out'] );
 										?>
 									</span>
 								</li>

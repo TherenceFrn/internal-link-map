@@ -1,7 +1,7 @@
-# Link Map for Yoast SEO
+# Internal Link Map
 
-[![Latest release](https://img.shields.io/github/v/release/TherenceFrn/link-map-for-yoast-seo?label=version)](https://github.com/TherenceFrn/link-map-for-yoast-seo/releases/latest)
-[![CI](https://github.com/TherenceFrn/link-map-for-yoast-seo/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/TherenceFrn/link-map-for-yoast-seo/actions/workflows/ci.yml)
+[![Latest release](https://img.shields.io/github/v/release/TherenceFrn/internal-link-map?label=version)](https://github.com/TherenceFrn/internal-link-map/releases/latest)
+[![CI](https://github.com/TherenceFrn/internal-link-map/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/TherenceFrn/internal-link-map/actions/workflows/ci.yml)
 
 See your internal linking as an interactive graph and spot orphan pages, using the links [Yoast SEO](https://wordpress.org/plugins/wordpress-seo/) already indexes. No crawl, no extra table, no external request.
 
